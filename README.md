@@ -1,4 +1,4 @@
-# 3-641 Microcontroladoes y Microprocesadores
+# 3-641 Microcontroladores y Microprocesadores
 
 ## Proyectos en este directorio
 
@@ -18,3 +18,9 @@ Se utiliza como demora una función del SDK bloqueante, práctica NO recomendada
 En este proyecto se describe la conexión del hardware en un header (hardware.h) como ejemplo de uso de esos archivos en el proyecto.
 Se conecta un pulsador en el GPIO15 (a GND y con una R de pullup externa) de forma que el GPIO se mantiene en alto si NO está presionado el pulsador.
 EL LED enciende si el pulsador está presionado y se apaga si se libera el pulsador.
+
+
+### 03_puls_led_2
+
+Igual que el anterior, solo que en este proyecto se agregan un pulsador y un LED, de modo que ahorac cada pulsador controla un LED.
+Se utilizaron, para inicializar el hardware, las funciones del SDK "masked" para ejemplificar su uso, aplicando en cada caso, la máscara correspondiente.
