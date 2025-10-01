@@ -9,5 +9,14 @@ Se puede copiar para tener como base de otros proyectos. También es necesario, 
 
 ### 01_parpadeo
 
-En este proyecto se configura un GPIO como salida digital y se controla el encendido y apagado de un LED cada 500mS.
+En este proyecto se configura el GPIO22 como salida digital donde se conecta un LED con R limitadora y se provoca su encendido y apagado cada 500mS.
 Se utiliza como demora una función del SDK bloqueante, práctica NO recomendada para programar, pero simple para esta sencilla demostración.
+
+
+### 02_puls_led
+
+#### _1
+
+En este proyecto se describe la conexión del hardware en un header (hardware.h) como ejemplo de uso de esos archivos en el proyecto.
+Se conecta un pulsador en el GPIO15 (a GND y con una R de pullup externa) de forma que el GPIO se mantiene en alto si NO está presionado el pulsador.
+EL LED enciende si el pulsador está presionado y se apaga si se libera el pulsador.
