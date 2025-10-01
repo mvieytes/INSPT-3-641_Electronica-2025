@@ -13,9 +13,7 @@ En este proyecto se configura el GPIO22 como salida digital donde se conecta un 
 Se utiliza como demora una función del SDK bloqueante, práctica NO recomendada para programar, pero simple para esta sencilla demostración.
 
 
-### 02_puls_led
-
-#### _1
+### 02_puls_led_1
 
 En este proyecto se describe la conexión del hardware en un header (hardware.h) como ejemplo de uso de esos archivos en el proyecto.
 Se conecta un pulsador en el GPIO15 (a GND y con una R de pullup externa) de forma que el GPIO se mantiene en alto si NO está presionado el pulsador.
