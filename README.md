@@ -34,3 +34,8 @@ En este proyecto, basado en el anterior, solo usamos un pulsador y un LED para q
 ### 05_puls_led_int_1
 
 Igual al proyecto anterior, solo que en este caso se detecta el evento de flanco descendente en la interrupción de GPIO, donde se inicializa la variable "demora" si no está inicializada, y luego, en el lazo principal, se determina al expirar dicha demora, si el pulsador está presionado y se habilita realizar la función necesaria, en este caso, cambiar el estado de un LED.
+
+
+### 06_puls_led_int_2
+
+Al proyecto anterior se agrega un pulsador y un LED. Ahora con una segunda variable de demora, en la misma interrupción se discrimina en que pulsador se produce el evento e inicializa la demora correspondiente. Si el pulsador, pasada la demora, sigue presionado, se cambia el estado del LED asociado.
