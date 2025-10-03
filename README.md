@@ -29,3 +29,8 @@ Se utilizaron, para inicializar el hardware, las funciones del SDK "masked" para
 ### 04_puls_led_3
 
 En este proyecto, basado en el anterior, solo usamos un pulsador y un LED para que, cada vez que se presiona el pulsador, el LED cambie de estado (encendido o apagado). Aquí se agregó una variable "flag" auxiliar para discriminar cuando se produce un flanco descendente en el GPIO del pulsador y una variable "demora" para determinar el momento en que dicho evento se produce y poder, luego de pasado un tiempo prudencial antirebote (30mS) y si el pulsador sigue preionado, cambiar el estado del LED. En el código los comentarios aclaran que se ejecuta en cada parte del mismo.
+
+
+### 05_puls_led_int_1
+
+Igual al proyecto anterior, solo que en este caso se detecta el evento de flanco descendente en la interrupción de GPIO, donde se inicializa la variable "demora" si no está inicializada, y luego, en el lazo principal, se determina al expirar dicha demora, si el pulsador está presionado y se habilita realizar la función necesaria, en este caso, cambiar el estado de un LED.
