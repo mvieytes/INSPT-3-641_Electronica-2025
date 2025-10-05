@@ -39,3 +39,13 @@ Igual al proyecto anterior, solo que en este caso se detecta el evento de flanco
 ### 06_puls_led_int_2
 
 Al proyecto anterior se agrega un pulsador y un LED. Ahora con una segunda variable de demora, en la misma interrupción se discrimina en que pulsador se produce el evento e inicializa la demora correspondiente. Si el pulsador, pasada la demora, sigue presionado, se cambia el estado del LED asociado.
+
+
+### 07_adc
+
+Este proyecto implementa la lectura de una entrada analógica (potenciómetro conectado al GPIO26, canal 0 del ADC) cada 100mS, acumula 10 mediciones y realiza un promedio, obteniendo un valor cada 1 seg. Se muestra por consola el promedio obtenido y su conversión a tensión (suponiendo Vdd de alimentación de 3,3v). Se agrega en CMakeLists.txt la biblioteca de hardware ADC (en el campo target_link_libraries).
+
+
+### 08_adc_filtros
+
+Con base en el proyecto anterior, aquí se implementan 3 ejemplos de filtros sencillos, un promedio móvil, un filtro IIR y un filtro FIR (que implementa un tipo promedio móvil). Para todos, se toma una muestra ADC cada 10mS (100Hz) y se procesa esa misma muestra en cada caso, la cual se puede procesar como 12bits o, según compilación condicional, 10 u 8 bits. También se utiliza (condicionalmente) la extensión Teleplot para graficar los valores salidas que se muestran en consola.
