@@ -49,3 +49,13 @@ Este proyecto implementa la lectura de una entrada analógica (potenciómetro co
 ### 08_adc_filtros
 
 Con base en el proyecto anterior, aquí se implementan 3 ejemplos de filtros sencillos, un promedio móvil, un filtro IIR y un filtro FIR (que implementa un tipo promedio móvil). Para todos, se toma una muestra ADC cada 10mS (100Hz) y se procesa esa misma muestra en cada caso, la cual se puede procesar como 12bits o, según compilación condicional, 10 u 8 bits. También se utiliza (condicionalmente) la extensión Teleplot para graficar los valores salidas que se muestran en consola.
+
+
+### 10_pwm_servo_puls
+
+Implementa un PWM configurado a una frecuencia de 50Hz y con un ancho de pulso variable de 0,5mS a 2,5mS para controlar la posición de un servomecanismo de 0º a 180º y viceversa, en 10 pasos de 18º c/u cada vez que se presiona el pulsador.
+
+
+### 11_pwm_servo_adc
+
+Igual al anterior, pero agrega la lectura de un potenciómetro para hacer la variación de 0º a 180º y viceversa con todos los valores intermeios. Se puede, según com pilación condicional, pasar al comportamiento del anterior.
