@@ -11,7 +11,6 @@
 
 wifi_sta_data_t wifi_sta_data;
 
-
 wifi_sta_data_t* ptr_wifi_data(void) {
     return (&wifi_sta_data);
 }

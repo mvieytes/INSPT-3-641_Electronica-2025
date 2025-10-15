@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "debug_sws_config.h"
 #include "errores_sws.h"
+
 #include "http.h"
 
 #include "pico/cyw43_arch.h"
@@ -8,10 +10,8 @@
 #include "lwip/netif.h"
 #include "lwip/ip4_addr.h"
 
-#define HTTP_DEBUG
-
 html_page_t html_page_to_serve;
-html_actions_t html_actions;
+html_actions_t html_actions_to_do;
 
 struct tcp_pcb* pcb;
 
@@ -19,7 +19,7 @@ void set_html_to_serve(html_page_t html_page) {
     html_page_to_serve = html_page;
 }
 void set_html_actions(html_actions_t html_actions) {
-    html_actions = html_actions;
+    html_actions_to_do = html_actions;
 }
 
 /* Callback cuando se confirma que se envió todo */
@@ -44,7 +44,7 @@ error_t http_recv(void* arg, struct tcp_pcb* tpcb, struct pbuf* p, err_t err) {
     pbuf_copy_partial(p, req, p->tot_len, 0);
     req[p->tot_len] = '\0';
 
-#ifdef HTTP_DEBUG
+#if (HTTP_DEBUG == 1)
     printf("Solicitud:\n%s\n", req);
 #endif
     // Responde favicon.ico vacío
@@ -58,19 +58,19 @@ error_t http_recv(void* arg, struct tcp_pcb* tpcb, struct pbuf* p, err_t err) {
 
     if (response == NULL) {
         // Generar respuesta HTML
-        if (html_actions)
-            html_actions(req);
+        if (html_actions_to_do)
+            html_actions_to_do(req);
 
         if (html_page_to_serve) {
             int content_len = 0;
             response = html_page_to_serve(&content_len);
-#ifdef HTTP_DEBUG
+#if (HTTP_DEBUG == 1)
             printf("Largo respuesta: %d\n", content_len);
 #endif
         }
     }
 
-#ifdef HTTP_DEBUG
+#if (HTTP_DEBUG == 1)
     printf("Enviando respuesta:\n%s\n", response);
 #endif
     // Enviar respuesta

@@ -6,8 +6,8 @@
 #include "html.h"
 
 /* Reemplazar aquí con el SSID y PASS de nuestro AP */
-const char my_ssid[] = "mi_ssid";
-const char my_pass[] = "mi_pass";
+const char my_ssid[] = "Gwynt";
+const char my_pass[] = "G44dG3rl!";
 
 error_t soc_cyw43_init(void);
 

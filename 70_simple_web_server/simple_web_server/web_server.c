@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "pico/cyw43_arch.h"
+#include "debug_sws_config.h"
 #include "web_server.h"
 #include "wifi.h"
 #include "http.h"
@@ -29,10 +30,10 @@ enum {
 };
 
 void set_ssid_to_connect(const char* ssid) {
-    ssid_to_connect = (char*)ssid;
+    ssid_to_connect = (char *)(ssid);
 }
 void set_pass_to_connect(const char* pass) {
-    ssid_to_connect = (char*)pass;
+    pass_to_connect = (char *)(pass);
 }
 
 void web_server_init_data(void) {
@@ -62,16 +63,21 @@ void web_server_fsm(void) {
     case WIFI_CONNECT:
         if ((tout_retry_web_server) && (tout_retry_web_server <= to_ms_since_boot(get_absolute_time()))) {
             tout_retry_web_server = 0;
+#if (WEB_SERVER_DEBUG == 1)
             printf("Conectando...\r\n");
+#endif
             error = wifi_connect(web_server_wifi_data);
             if (error == WIFI_OK) {
                 cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
                 web_server_wifi_data->wifi_status |= WIFI_CONECTED;
+#if (WEB_SERVER_DEBUG == 1)
                 printf("Conectado al AP!!!\r\n");
                 printf("Mi IP address %d.%d.%d.%d\r\n", web_server_wifi_data->my_ip[0], web_server_wifi_data->my_ip[1], web_server_wifi_data->my_ip[2], web_server_wifi_data->my_ip[3]);
+#endif
                 state = WIFI_SERVER_UP;
             } else {
                 tout_retry_web_server = to_ms_since_boot(get_absolute_time()) + TOUT_REINTENTO_CONEXION_AP;
+#if (WEB_SERVER_DEBUG == 1)
                 if (error == WIFI_ERR_TOUT) {
                     printf("Error timeout al conectar\r\n");
                 } else if (error == WIFI_ERR_AUTH) {
@@ -79,24 +85,31 @@ void web_server_fsm(void) {
                 } else {
                     printf("Error, verifique SSID y/o password\r\n");
                 }
+#endif
             }
         }
         break;
     case WIFI_SERVER_UP:
+#if (WEB_SERVER_DEBUG == 1)
         printf("Levantando servidor...\r\n");
+#endif
         error = init_http_server();
         if (error == TCP_OK) {
             web_server_wifi_data->wifi_status |= WIFI_SERVER_ONLINE;
+#if (WEB_SERVER_DEBUG == 1)
             printf("Servidor en linea!!!\r\n");
+#endif
             tout_check_connected = to_ms_since_boot(get_absolute_time()) + TOUT_CHEQUEO_CONEXION_AP;
             state = WIFI_ONLINE;
         } else {
+#if (WEB_SERVER_DEBUG == 1)
             if (error == TCP_NO_MEM) {
                 printf("Error sin memoria para crear puerto TCP\r\n");
             } else if (error == TCP_ERR_USE) {
                 printf("Error puerto TCP ocupado\r\n");
             }
             printf("Desconexión del AP\r\n");
+#endif
             web_server_wifi_data->wifi_status &= ~(WIFI_CONECTED | WIFI_SERVER_ONLINE);
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
             cyw43_wifi_leave(&cyw43_state, CYW43_ITF_STA);
@@ -111,7 +124,9 @@ void web_server_fsm(void) {
             if (cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) != CYW43_LINK_UP) {
                 // Se cayó AP, reinicio conexión
                 web_server_wifi_data->wifi_status &= ~(WIFI_CONECTED | WIFI_SERVER_ONLINE);
+#if (WEB_SERVER_DEBUG == 1)
                 printf("Se cayó la conexión al AP\r\n");
+#endif
                 cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
                 deinit_http_server();
                 tout_retry_web_server = to_ms_since_boot(get_absolute_time()) + TOUT_REINTENTO_CONEXION_AP;
