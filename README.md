@@ -66,6 +66,16 @@ Implementa un PWM configurado a una frecuencia de 50Hz y con un ancho de pulso v
 Igual al anterior, pero agrega la lectura de un potenciómetro para hacer la variación de 0º a 180º y viceversa con todos los valores intermeios. Se puede, según com pilación condicional, pasar al comportamiento del anterior.
 
 
+### 60_LCD1602_I2C
+
+Librería para utilizar un display LCD alfanumérico de 16x2 con interfaz I2C y programa básico de ejemplo de uso.
+
+
+### 61_SSD1306_I2C
+
+Librería para utilizar un display OLED SSD1306 con interfaz I2C y programa básico de ejemplo de uso.
+
+
 ### 70_simple_web_server
 
 Implementa un sencillo servidor web que muestra una página con el estado de dos pulsadores y dos LEDs y permite enecnderlos o apagarlos a través de dichos pulsadores o desde la web con la acción de 4 botones.
