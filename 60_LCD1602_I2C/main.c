@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "hardware.h"
-
+#include "hardware/i2c.h"
+#include"hardware.h"
 #include "lcd_i2c.h"
 
 /* Estructura que define la configuración del HW del LCD */
@@ -14,20 +14,20 @@ int main() {
 
     stdio_init_all();
 
-    /* Estas líneas de código son necesarias para inicializar el HW del LCD */
-    /* -------------------------------------------------------------------- */
-    /* Inicializan el HW del uC para el LCD */
-    /* Completa los datos en la estructura de configuración */
+    // Inicializa los gpio's e instancia de I2C que se utilizará
+    gpio_set_function(I2C_SDA_GPIO, GPIO_FUNC_I2C);
+    gpio_set_function(I2C_SCL_GPIO, GPIO_FUNC_I2C);
+
+    i2c_init(I2C_INST, I2C_BAUDRATE);
+
+    lcd.i2c_inst_init = true;
     lcd.i2c_inst = I2C_INST;
     lcd.sda_gpio = I2C_SDA_GPIO;
     lcd.scl_gpio = I2C_SCL_GPIO;
     lcd.i2c_baudrate = I2C_BAUDRATE;
-    lcd.i2c_address = LCD_ADDRESS;
     lcd.lcd_lines = LCD_LINE_QTY;
-    /* Invoca a la inicialización pasando el puntero a dicha estructura */
+
     lcd_i2c_init((lcd_i2c_t*)(&lcd));
-    /* -------------------------------------------------------------------- */
-    /* Hasta aquí */
 
     /* Borra y prepara LCD para comenar a escribir */
     lcd_clear();

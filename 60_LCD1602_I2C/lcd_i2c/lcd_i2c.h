@@ -5,6 +5,8 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 
+#define LCD_ADDRESS     (0x27)                //Dirección más difundida, verificar si corresponde a nuestro LCD
+
 typedef enum {
     LCD_LINE_QTY_1 = 1,
     LCD_LINE_QTY_2,
@@ -20,25 +22,22 @@ typedef enum {
 } line_nro_t;
 
 typedef struct {
+    bool i2c_inst_init;
     i2c_inst_t* i2c_inst;
     uint sda_gpio;
     uint scl_gpio;
     uint32_t i2c_baudrate;
-    uint8_t i2c_address;
     line_nro_t lcd_lines;
     uint8_t stat_backl;
-    int (*lcd_write)(i2c_inst_t* i2c, uint8_t addr, const uint8_t* src, size_t len, bool nostop);
-    void (*sleep)(uint32_t ms);
 } lcd_i2c_t;
 
-void lcd_print_char(uint8_t dato);
-void lcd_print(uint8_t* buff);
-void lcd_clear(void);
-void lcd_return_home(void);
-void lcd_set_cursor(line_nro_t row, uint8_t col);
-void lcd_set_back_on(void);
-void lcd_set_back_off(void);
-void lcd_i2c_init_hw(void);
-void lcd_i2c_init(lcd_i2c_t* lcd_i2c);
+int lcd_print_char(uint8_t dato);
+int lcd_print(uint8_t* buff);
+int lcd_clear(void);
+int lcd_return_home(void);
+int lcd_set_cursor(line_nro_t row, uint8_t col);
+int lcd_set_back_on(void);
+int lcd_set_back_off(void);
+int lcd_i2c_init(lcd_i2c_t* config);
 
 #endif
