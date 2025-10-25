@@ -1,0 +1,44 @@
+Para usar esta librería:
+- Copiar la carpeta "ds3231_24c32_i2c" al directorio raíz del proyecto
+- En el CMakeList.txt del proyecto AGREGAR:
+    - El subdirectorio
+        add_subdirectory(ds3231_24c32_i2c)
+    - La target_link_libraries
+        target_link_libraries(.... ds3231_24c32_i2c)
+- En el archivo main.c incluir el archivo ds3231_24c32_i2c.h
+    #include "ds3231_24c32_i2c.h"
+- Crear una variable del tipo ds3231_24c32_i2c_t (estructura de datos), por ejemplo:
+    ds3231_24c32_t ds3231_24c32;
+Estos últimos dos ítems quedarían así:
+/* -------------------------------------------------------------------- */
+
+#include "ds3231_24c32_i2c.h"
+ds3231_24c32_t ds3231_24c32;           //Estructura que define la configuración del HW del conjunto RTC-MEM
+
+/* -------------------------------------------------------------------- */
+
+- En el código, inicializar los campos de dicha estructura con los datos propios de la implementación de HW.
+
+- Defines del hardware (en hardware.h)
+    /* Puerto I2C (i2c0 o i2c1) */
+    #define I2C_INST i2c0                   //Posibles opciones, i2c0 o i2c1
+    /* GPIOs usados para I2C */
+    #define I2C_SDA_GPIO 4                  //Ver el pinout para las distintas posibilidades
+    #define I2C_SCL_GPIO 5
+    /* Velocidad I2C (en Hz) */
+    #define I2C_BAUDRATE 100000             //En Hz, funciona a 100KHz (100000)
+
+- En el main.c
+    - Si se inicializa el I2C en el main (xque habrán otros dispositivos por ejemplo)
+        ds3231_24c32.i2c_inst_init = true;			// Indica que el I2C ya está inicializado
+
+    - Y completar estos datos en la estructura de configuración
+        ds3231_24c32.i2c_inst = I2C_INST;			// Completa los datos en la estructura de configuración
+        ds3231_24c32.sda_gpio = I2C_SDA_GPIO;
+        ds3231_24c32.scl_gpio = I2C_SCL_GPIO;
+        ds3231_24c32.i2c_baudrate = I2C_BAUDRATE;
+
+    - Llamar SIEMPRE a la inicialización (que además inicializa I2C si ds3231_24c32.i2c_inst_init = false)
+        DS3234_24C64_init((ds3231_24c32_t *)(&ds3231_24c32));  // Invoca a la inicialización pasando el puntero a dicha estructura
+
+/* -------------------------------------------------------------------- */
