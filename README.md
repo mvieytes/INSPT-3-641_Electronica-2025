@@ -76,6 +76,11 @@ Librería para utilizar un display LCD alfanumérico de 16x2 con interfaz I2C y 
 Librería para utilizar un display OLED SSD1306 con interfaz I2C y programa básico de ejemplo de uso.
 
 
+### 62_DS3231_24C32_I2C
+
+Librería para utilizar el módulo RTC + eeprom (DS3231 + 24C32) por I2C y programa básico de ejemplo.
+
+
 ### 70_simple_web_server
 
 Implementa un sencillo servidor web que muestra una página con el estado de dos pulsadores y dos LEDs y permite enecnderlos o apagarlos a través de dichos pulsadores o desde la web con la acción de 4 botones.
