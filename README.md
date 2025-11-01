@@ -81,6 +81,21 @@ Librería para utilizar un display OLED SSD1306 con interfaz I2C y programa bás
 Librería para utilizar el módulo RTC + eeprom (DS3231 + 24C32) por I2C y programa básico de ejemplo.
 
 
-### 70_simple_web_server
+### 70_wifi_sta
 
-Implementa un sencillo servidor web que muestra una página con el estado de dos pulsadores y dos LEDs y permite enecnderlos o apagarlos a través de dichos pulsadores o desde la web con la acción de 4 botones.
+Ejemplo básico de conexión a un access point (AP) con SSID y password.
+
+
+### 71_wifi_sta_ntp
+
+Agrega al ejemplo anterior la conexión a un servidor NTP para actualizar la fecha y hora
+
+
+### 72_web_server
+
+Basado en el proyecto 70_wifi_sta levanta un servidor http y sirve una web básica con dos pulsadores para encender y apagar un LED y un campo para leer el estado de un pulsador.
+
+
+### 73_web_server_ntp
+
+Agrega al proyecto anterior la lectura del servidor NTP para traer fecha y hora actual
