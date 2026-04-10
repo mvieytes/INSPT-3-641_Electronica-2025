@@ -12,7 +12,6 @@ al pin GPIO 26 (ADC0) del Raspberry Pi Pico, y que el host esté listo para reci
 donde x corresponde al número de puerto COM asignado al dispositivo USB del Pico).
 Una vez capturados los datos, ejecutar python test_SINAD_ENOB.py samples.txt para calcular
 el SINAD y ENOB de la señal muestreada.
-
 */
 #include <stdio.h>
 #include "pico/stdlib.h"
@@ -27,13 +26,12 @@ el SINAD y ENOB de la señal muestreada.
 uint16_t sample_buffer[ADC_NUM_SAMPLES];
 uint16_t warmup_buffer[ADC_WARMUP_SAMPLES];
 
-static void capture_samples(int dma_chan, dma_channel_config *cfg, uint16_t *buffer, size_t count)
-{
+static void capture_samples(int dma_chan, dma_channel_config* cfg, uint16_t* buffer, size_t count) {
     dma_channel_configure(dma_chan, cfg,
-                          buffer,
-                          &adc_hw->fifo,
-                          count,
-                          true);
+        buffer,
+        &adc_hw->fifo,
+        count,
+        true);
 
     adc_run(true);
     dma_channel_wait_for_finish_blocking(dma_chan);
@@ -41,8 +39,7 @@ static void capture_samples(int dma_chan, dma_channel_config *cfg, uint16_t *buf
     adc_fifo_drain();
 }
 
-int main()
-{
+int main() {
     stdio_init_all();
 
     // 1. Inicializar ADC
@@ -63,22 +60,19 @@ int main()
     channel_config_set_write_increment(&cfg, true);
     channel_config_set_dreq(&cfg, DREQ_ADC); // Sincronizar con el ADC
 
-    while (true)
-    {
+    while (true) {
         // Captura dummy corta para estabilizar el arranque antes del bloque medido.
         capture_samples(dma_chan, &cfg, warmup_buffer, ADC_WARMUP_SAMPLES);
         capture_samples(dma_chan, &cfg, sample_buffer, ADC_NUM_SAMPLES);
 
         // 3. Enviar datos por UART con framing para que el parser del host pueda resincronizar.
         printf("BEGIN %d\r\n", ADC_NUM_SAMPLES);
-        for (int i = 0; i < ADC_NUM_SAMPLES; i++)
-        {
+        for (int i = 0; i < ADC_NUM_SAMPLES; i++) {
             printf("%04u\r\n", sample_buffer[i] & 0x0FFF);
         }
         printf("END\r\n");
 
-        while (1)
-        {
+        while (1) {
             tight_loop_contents(); // Evita que el programa termine
         }
     }
