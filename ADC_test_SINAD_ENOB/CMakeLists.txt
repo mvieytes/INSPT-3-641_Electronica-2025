@@ -17,41 +17,43 @@ else()
 endif()
 set(sdkVersion 2.2.0)
 set(toolchainVersion 14_2_Rel1)
-set(picotoolVersion 2.2.0)
+set(picotoolVersion 2.2.0-a4)
 set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
 if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
 # ====================================================================================
-set(PICO_BOARD pico2_w CACHE STRING "Board type")
+set(PICO_BOARD pico2 CACHE STRING "Board type")
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(05_puls_led_int_1 C CXX ASM)
+project(ADC_test_SINAD_ENOB C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(05_puls_led_int_1 main.c )
+add_executable(ADC_test_SINAD_ENOB main.c )
 
-pico_set_program_name(05_puls_led_int_1 "05_puls_led_int_1")
-pico_set_program_version(05_puls_led_int_1 "0.1")
+pico_set_program_name(ADC_test_SINAD_ENOB "ADC_test_SINAD_ENOB")
+pico_set_program_version(ADC_test_SINAD_ENOB "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(05_puls_led_int_1 1)
-pico_enable_stdio_usb(05_puls_led_int_1 0)
+pico_enable_stdio_uart(ADC_test_SINAD_ENOB 1)
+pico_enable_stdio_usb(ADC_test_SINAD_ENOB 0)
 
 # Add the standard library to the build
-target_link_libraries(05_puls_led_int_1
-        pico_stdlib)
+target_link_libraries(ADC_test_SINAD_ENOB
+        pico_stdlib
+        hardware_adc
+        hardware_dma)
 
 # Add the standard include files to the build
-target_include_directories(05_puls_led_int_1 PRIVATE
+target_include_directories(ADC_test_SINAD_ENOB PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-pico_add_extra_outputs(05_puls_led_int_1)
+pico_add_extra_outputs(ADC_test_SINAD_ENOB)
 
