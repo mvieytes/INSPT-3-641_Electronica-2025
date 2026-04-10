@@ -31,12 +31,12 @@ def calcular_sinad_enob(archivo_datos, fs=50000, adc_min=0, adc_max=4095):
     if n < 32:
         return "No hay suficientes muestras válidas para calcular SINAD/ENOB"
 
-    # 2. Pre-procesamiento
-    muestras -= np.mean(muestras)
+    # 2. Pre-procesamiento: NO restamos media aquí, dejamos que el ajuste encuentre el offset
+    muestras_centradas = muestras - np.mean(muestras)  # Solo para FFT inicial
 
     # FFT solo para estimar la frecuencia inicial de la fundamental.
     ventana = blackmanharris(n)
-    muestras_ventaneadas = muestras * ventana
+    muestras_ventaneadas = muestras_centradas * ventana
 
     espectro = np.abs(rfft(muestras_ventaneadas))
     potencia = espectro**2
@@ -47,7 +47,7 @@ def calcular_sinad_enob(archivo_datos, fs=50000, adc_min=0, adc_max=4095):
     # 3. Ajuste senoidal: más robusto cuando no hay muestreo coherente exacto.
     tiempo = np.arange(n) / fs
     amplitud_inicial = (np.max(muestras) - np.min(muestras)) / 2
-    offset_inicial = 0.0
+    offset_inicial = np.mean(muestras)  # Mejor estimación inicial del offset
 
     try:
         parametros, _ = curve_fit(
@@ -72,12 +72,40 @@ def calcular_sinad_enob(archivo_datos, fs=50000, adc_min=0, adc_max=4095):
     sinad = 20 * np.log10(senal_rms / ruido_distorsion_rms)
     enob = (sinad - 1.76) / 6.02
 
-    print(f"--- Resultados del Análisis ---")
+    # Calcular THD y SNR separados usando FFT del residuo
+    residuo_centrado = residuo - np.mean(residuo)
+    espectro_residuo = np.abs(rfft(residuo_centrado * ventana))
+    potencia_residuo = espectro_residuo ** 2
+
+    # Identificar armónicos (2f, 3f, 4f, ...) dentro del rango de Nyquist
+    potencia_armonicos = 0.0
+    num_armonicos = 0
+    for h in range(2, 10):  # Armónicos 2 a 9
+        idx_h = int(round(h * idx_fundamental))
+        if idx_h < len(potencia_residuo):
+            # Sumar bins cercanos (+/-1) para capturar leakage
+            start = max(1, idx_h - 1)
+            end = min(len(potencia_residuo), idx_h + 2)
+            potencia_armonicos += np.sum(potencia_residuo[start:end])
+            num_armonicos += 1
+
+    # THD = sqrt(suma potencia armónicos) / amplitud fundamental
+    thd_ratio = np.sqrt(potencia_armonicos) / (espectro[idx_fundamental] + 1e-12)
+    thd_db = 20 * np.log10(thd_ratio + 1e-12)
+
+    # SNR = señal / ruido (excluyendo armónicos)
+    potencia_ruido = np.sum(potencia_residuo) - potencia_armonicos
+    ruido_rms = np.sqrt(max(0, potencia_ruido)) / (n / 2)  # Normalizar
+    snr_db = 20 * np.log10(senal_rms / (ruido_rms + 1e-12))
+
+    print(f"--- Resultados del Análisis (Sine Curve Fit) ---")
     print(f"Muestras procesadas: {n}")
     if descartadas:
         print(f"Muestras descartadas por fuera de rango [{adc_min}, {adc_max}]: {descartadas}")
     print(f"Frecuencia Fundamental: {frecuencia_fundamental:.2f} Hz")
     print(f"SINAD: {sinad:.2f} dB")
+    print(f"THD:   {thd_db:.2f} dB")
+    print(f"SNR:   {snr_db:.2f} dB")
     print(f"ENOB:  {enob:.2f} bits")
 
     # Guardar gráficos: espectro y ajuste en tiempo

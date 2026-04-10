@@ -18,7 +18,7 @@ el SINAD y ENOB de la señal muestreada.
 #include "hardware/adc.h"
 #include "hardware/dma.h"
 
-#define ADC_NUM_SAMPLES 4096
+#define ADC_NUM_SAMPLES 4000  // 80 ciclos exactos a 1kHz con fs=50kHz (coherent sampling)
 #define ADC_WARMUP_SAMPLES 32
 #define ADC_PIN 26 // GPIO 26 es Canal 0
 #define SAMPLE_RATE 50000
