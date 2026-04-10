@@ -3,6 +3,8 @@ import numpy as np
 from scipy.fft import rfft, rfftfreq
 from scipy.optimize import curve_fit
 from scipy.signal.windows import blackmanharris
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 def _modelo_senoidal(t, amplitud, frecuencia, fase, offset):
     return amplitud * np.sin(2 * np.pi * frecuencia * t + fase) + offset
@@ -77,6 +79,35 @@ def calcular_sinad_enob(archivo_datos, fs=50000, adc_min=0, adc_max=4095):
     print(f"Frecuencia Fundamental: {frecuencia_fundamental:.2f} Hz")
     print(f"SINAD: {sinad:.2f} dB")
     print(f"ENOB:  {enob:.2f} bits")
+
+    # Guardar gráficos: espectro y ajuste en tiempo
+    try:
+        fig1 = plt.figure(figsize=(8, 4))
+        plt.plot(freqs, 20 * np.log10(espectro + 1e-12))
+        plt.xlabel('Frecuencia (Hz)')
+        plt.ylabel('Magnitud (dB)')
+        plt.title('Espectro (ventana Blackman-Harris)')
+        plt.grid(True)
+        out_spec = Path(archivo_datos).with_suffix('')
+        plt.tight_layout()
+        fig1.savefig(str(out_spec) + '_spectrum.png', dpi=200)
+        plt.close(fig1)
+
+        fig2 = plt.figure(figsize=(8, 4))
+        plt.plot(tiempo, muestras, label='Muestras')
+        plt.plot(tiempo, senal_ajustada, label='Senoide ajustada')
+        plt.plot(tiempo, residuo, label='Residuo (ruido+distorsión)')
+        plt.xlabel('Tiempo (s)')
+        plt.ylabel('ADC (units)')
+        plt.title('Ajuste en tiempo y residuo')
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        fig2.savefig(str(out_spec) + '_timedomain.png', dpi=200)
+        plt.close(fig2)
+        print(f"Gráficos guardados: {out_spec}_spectrum.png, {out_spec}_timedomain.png")
+    except Exception as e:
+        print(f"No se pudo generar los gráficos: {e}")
 
 
 def main():
