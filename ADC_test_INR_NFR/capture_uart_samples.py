@@ -9,14 +9,14 @@ from serial.tools import list_ports
 
 def _build_parser():
     parser = argparse.ArgumentParser(
-        description="Captura un bloque de muestras ADC enviadas por el puerto serie del Pico y lo guarda en un TXT."
+        description="Captura 4096 pares 'codigo_adc ocurrencias' enviados por UART por el firmware del Pico y los guarda en un TXT."
     )
     parser.add_argument("port", nargs="?", help="Puerto serie, por ejemplo COM5")
     parser.add_argument(
         "--baudrate",
         type=int,
         default=115200,
-        help="Baudrate UART (default: 115200)",
+        help="Baudrate UART del firmware (default: 115200)",
     )
     parser.add_argument(
         "--output",
@@ -26,14 +26,14 @@ def _build_parser():
     parser.add_argument(
         "--timeout",
         type=float,
-        default=30.0,
-        help="Tiempo maximo para recibir el bloque completo, en segundos (default: 30)",
+        default=60.0,
+        help="Tiempo maximo para recibir el bloque completo, en segundos (default: 60)",
     )
     parser.add_argument(
         "--expected-count",
         type=int,
-        default=8192,
-        help="Cantidad esperada de muestras. Si se omite, se usa el valor enviado en BEGIN.",
+        default=4096,
+        help="Cantidad esperada de pares codigo-conteo dentro del bloque (default: 4096)",
     )
     parser.add_argument(
         "--list-ports",
@@ -66,6 +66,16 @@ def _parse_begin_line(line):
         return None
 
 
+def _normalize_payload_line(line):
+    normalized = line.replace(",", " ").replace(";", " ").replace("-", " ")
+    parts = normalized.split()
+    if len(parts) != 2:
+        return None
+    if not all(part.isdigit() for part in parts):
+        return None
+    return " ".join(parts)
+
+
 def capture_samples(port, baudrate, output_path, timeout, expected_count):
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -78,7 +88,7 @@ def capture_samples(port, baudrate, output_path, timeout, expected_count):
 
         deadline = time.monotonic() + timeout
         block_count = None
-        samples = []
+        records = []
         capturing = False
 
         while time.monotonic() < deadline:
@@ -101,32 +111,33 @@ def capture_samples(port, baudrate, output_path, timeout, expected_count):
                     )
 
                 capturing = True
-                print(f"BEGIN recibido. Esperando {block_count} muestras...")
+                print(f"BEGIN recibido. Esperando {block_count} pares codigo-conteo...")
                 continue
 
             if line == "END":
                 if block_count is None:
                     raise RuntimeError("Se recibio END sin un BEGIN valido")
-                if len(samples) != block_count:
+                if len(records) != block_count:
                     raise RuntimeError(
-                        f"Bloque incompleto: se recibieron {len(samples)} muestras, se esperaban {block_count}"
+                        f"Bloque incompleto: se recibieron {len(records)} lineas, se esperaban {block_count}"
                     )
 
-                output_path.write_text("\n".join(samples) + "\n", encoding="ascii")
-                print(f"Captura completada: {len(samples)} muestras guardadas en {output_path}")
+                output_path.write_text("\n".join(records) + "\n", encoding="ascii")
+                print(f"Captura completada: {len(records)} lineas guardadas en {output_path}")
                 return 0
 
-            if not line.isdigit():
+            normalized_line = _normalize_payload_line(line)
+            if normalized_line is None:
                 continue
 
-            samples.append(line)
+            records.append(normalized_line)
 
-            if block_count is not None and len(samples) > block_count:
+            if block_count is not None and len(records) > block_count:
                 raise RuntimeError(
-                    f"Se recibieron mas muestras de las esperadas ({len(samples)} > {block_count})"
+                    f"Se recibieron mas lineas de las esperadas ({len(records)} > {block_count})"
                 )
 
-        raise TimeoutError("Timeout esperando el bloque de muestras por UART")
+        raise TimeoutError("Timeout esperando el bloque de histograma por UART")
 
 
 def main():

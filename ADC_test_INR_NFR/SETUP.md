@@ -88,9 +88,9 @@ openocd -s <scripts_path> -f interface/cmsis-dap.cfg -f target/<target>.cfg -c "
 
 7) Medición de Input-Referred Noise y Noise-Free Resolution
 
-- El firmware actual captura un bloque de `8192` muestras del `ADC0` (`GPIO26`) usando DMA y lo envía por el puerto serie USB del Pico (`COMx` en Windows).
+- El firmware actual captura `100` bloques de `10000` muestras del `ADC0` (`GPIO26`) usando DMA, acumula un histograma de `4096` bins y lo envía por el puerto serie USB del Pico (`COMx` en Windows).
 - Recomendación de ensayo inicial: cortocircuitar `GPIO26` a `AGND/GND` para medir el piso de ruido del sistema. Luego puedes repetir con un nivel DC silencioso cercano a media escala si quieres evaluar sensibilidad a la fuente de entrada.
-- El firmware transmite bloques repetidos con el formato `BEGIN N`, una muestra por línea y `END`, de modo que el script de captura pueda resincronizarse solo.
+- La salida tiene el formato `BEGIN 4096`, luego `4096` líneas con pares `codigo_adc ocurrencias` y finalmente `END`, de modo que el script de captura pueda resincronizarse solo.
 
 Flujo sugerido:
 
@@ -106,6 +106,17 @@ python capture_uart_samples.py COM5 --output samples.txt
 
 ```powershell
 python analyze_inr_nfr.py samples.txt --show
+```
+
+El archivo `samples.txt` resultante contendrá una línea por código ADC, por ejemplo:
+
+```text
+0 0
+1 0
+2 14
+3 287
+...
+4095 0
 ```
 
 Métricas reportadas por el script:
