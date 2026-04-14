@@ -1,18 +1,3 @@
-/*
-Inyectar en el canal 0 del ADC una señal senoidal que abarque desde el 10% al 90%
-del rango de entrada (aproximadamente 0.33V a 2.97V) a una frecuencia de 1kHz (Vpp = 2.64V, Voffset = 1.65V).
-El programa debe muestrear esta señal a una tasa de al menos 50kS/s utilizando el ADC con DMA,
-y enviar los datos muestreados por UART en un formato que permita al host identificar claramente
-el inicio y el final de cada bloque de muestras, así como la cantidad de muestras transmitidas.
-El programa debe incluir un mecanismo para estabilizar el arranque del ADC antes de comenzar a
-capturar el bloque principal de muestras, como una captura dummy corta.
-Antes de correr el programa, verificar de que la señal senoidal esté correctamente conectada
-al pin GPIO 26 (ADC0) del Raspberry Pi Pico, y que el host esté listo para recibir los datos por UART.
-(ejecutar desde la terminal integrada del VSCode lo siguiente: python capture_uart_samples.py COMx,
-donde x corresponde al número de puerto COM asignado al dispositivo USB del Pico).
-Una vez capturados los datos, ejecutar python test_SINAD_ENOB.py samples.txt para calcular
-el SINAD y ENOB de la señal muestreada.
-*/
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
