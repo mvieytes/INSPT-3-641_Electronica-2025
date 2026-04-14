@@ -48,7 +48,10 @@ int main()
     adc_select_input(ADC_CHANNEL);
     adc_fifo_setup(true, true, 1, false, false);
 
-    adc_set_clkdiv(48000000.0f / SAMPLE_RATE);
+    // Configurar frecuencia de muestreo.
+    // El periodo entre conversiones es (1 + clkdiv) ciclos del reloj ADC,
+    // por lo que para 50 kS/s con clk_adc=48 MHz se necesita clkdiv=959.
+    adc_set_clkdiv((48000000.0f / SAMPLE_RATE) - 1.0f);
 
     int dma_chan = dma_claim_unused_channel(true);
     dma_channel_config cfg = dma_channel_get_default_config(dma_chan);
