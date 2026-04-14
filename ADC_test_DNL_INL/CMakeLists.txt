@@ -38,7 +38,7 @@ pico_sdk_init()
 add_executable(ADC_test_DNL_INL main.c )
 
 target_compile_definitions(ADC_test_DNL_INL PRIVATE
-    PICO_DEFAULT_UART_BAUD_RATE=921600
+    PICO_DEFAULT_UART_BAUD_RATE=460800
 )
 
 pico_set_program_name(ADC_test_DNL_INL "ADC_test_DNL_INL")
