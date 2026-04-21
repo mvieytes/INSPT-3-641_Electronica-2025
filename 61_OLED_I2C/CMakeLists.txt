@@ -28,32 +28,32 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(61_SSD1306_I2C C CXX ASM)
+project(61_OLED_I2C C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(61_SSD1306_I2C main.c )
+add_executable(61_OLED_I2C main.c )
 
-pico_set_program_name(61_SSD1306_I2C "61_SSD1306_I2C")
-pico_set_program_version(61_SSD1306_I2C "0.1")
+pico_set_program_name(61_OLED_I2C "61_OLED_I2C")
+pico_set_program_version(61_OLED_I2C "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(61_SSD1306_I2C 1)
-pico_enable_stdio_usb(61_SSD1306_I2C 0)
+pico_enable_stdio_uart(61_OLED_I2C 1)
+pico_enable_stdio_usb(61_OLED_I2C 0)
 
-add_subdirectory(ssd1306_i2c)
+add_subdirectory(oled_i2c)
 # Add the standard library to the build
-target_link_libraries(61_SSD1306_I2C
+target_link_libraries(61_OLED_I2C
         pico_stdlib
-        ssd1306_i2c)
+    oled_i2c)
 
 # Add the standard include files to the build
-target_include_directories(61_SSD1306_I2C PRIVATE
+target_include_directories(61_OLED_I2C PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-pico_add_extra_outputs(61_SSD1306_I2C)
+pico_add_extra_outputs(61_OLED_I2C)
 

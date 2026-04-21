@@ -1,16 +1,21 @@
 Para usar esta librería:
-- Incluir la carpeta "ssd1306_i2c" en el proyecto
+- Incluir la carpeta "oled_i2c" en el proyecto
 - En el CMakeList.txt agregar el subdirectorio al proyecto
-    add_subdirectory(ssd1306_i2c)
-- En el CMakeList.txt agregar, en las target_link_libraries la librería lcd_i2c
-    target_link_libraries(${PROJECT_NAME} ssd1306_i2c)
-- En el archivo main incluir el archivo ssd1306_i2c.h
-    #include "ssd1306_i2c.h"
-- Crear una variable del tipo ssd1306_i2c_t (estructura de datos), por ejemplo:
-    ssd1306_i2c_t ssd1306;
+    add_subdirectory(oled_i2c)
+- En el CMakeList.txt agregar, en las target_link_libraries la librería oled_i2c
+    target_link_libraries(${PROJECT_NAME} oled_i2c)
+- En el archivo main incluir el archivo oled_i2c.h
+    #include "oled_i2c.h"
+- En el archivo oled_i2c.h seleccionar el controlador:
+    #define OLED_CONTROLLER OLED_CTRL_SH1106
+  Opciones disponibles:
+    OLED_CTRL_SSD1306
+    OLED_CTRL_SH1106
+- Crear una variable del tipo oled_i2c_t (estructura de datos), por ejemplo:
+    oled_i2c_t oled;
 Estos últimos dos ítems uedarían así:
 /* -------------------------------------------------------------------- */
-#include "ssd1306_i2c.h"
+#include "oled_i2c.h"
 
 /* Puerto I2C (i2c0 o i2c1) */
 #define I2C_INST i2c0                   //Posibles opciones, i2c0 o i2c1
@@ -22,7 +27,7 @@ Estos últimos dos ítems uedarían así:
 /* Dirección I2C */
 #define SDD1306_ADDRESS 0x3C            //Dirección del display SSD1306
 
-ssd1306_i2c_t ssd1306;                  //Estructura que define la configuración del HW del OLED
+oled_i2c_t oled;                        //Estructura que define la configuración del HW del OLED
 /* -------------------------------------------------------------------- */
 
 _ En el código, inicializar los campos de dicha estructura con los datos propios de la implementación de HW.
@@ -30,11 +35,11 @@ _ En el código, inicializar los campos de dicha estructura con los datos propio
 
 /* -------------------------------------------------------------------- */
 /* Inicializan el HW del uC para el LCD */
-ssd1306.i2c_inst = I2C_INST;                // Completa los datos en la estructura de configuración
-ssd1306.sda_gpio = I2C_SDA_GPIO;
-ssd1306.scl_gpio = I2C_SCL_GPIO;
-ssd1306.i2c_baudrate = I2C_BAUDRATE;
-ssd1306.i2c_address = SDD1306_ADDRESS;
+oled.i2c_inst = I2C_INST;                   // Completa los datos en la estructura de configuración
+oled.sda_gpio = I2C_SDA_GPIO;
+oled.scl_gpio = I2C_SCL_GPIO;
+oled.i2c_baudrate = I2C_BAUDRATE;
+oled.i2c_address = SDD1306_ADDRESS;
 
-SSD1306_init((ssd1306_i2c_t *)(&ssd1306));  // Invoca a la inicialización pasando el puntero a dicha estructura
+OLED_init((oled_i2c_t *)(&oled));           // Invoca a la inicialización pasando el puntero a dicha estructura
 /* -------------------------------------------------------------------- */

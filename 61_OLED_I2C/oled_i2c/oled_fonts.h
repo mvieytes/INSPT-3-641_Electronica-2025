@@ -1,5 +1,5 @@
-#ifndef _SSD1306_FONTS_H_
-#define _SSD1306_FONTS_H_
+#ifndef _OLED_FONTS_H_
+#define _OLED_FONTS_H_
 
 const uint8_t font_1[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Nothing
