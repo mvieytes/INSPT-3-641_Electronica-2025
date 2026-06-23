@@ -5,7 +5,7 @@
 
 /* Se puede dejar ambas comentadas p/12bits, o elegir entre 10 u 8 bits */
 //#define ADC_8BITS
-#define ADC_10BITS
+//#define ADC_10BITS
 
 /* Si está instalada la extensión Teleplot, para ver las gráficas de la salida */
 #define USA_TELEPLOT
