@@ -1,5 +1,13 @@
 # 3-641 Microcontroladores y Microprocesadores
 
+## Descarga de carpeta individual
+Se puede descargar solo una carpeta, para eso:
+1. Abrir la carpeta correspondiente
+2. Copiar el link de la barra del navegador
+3. Ir a https://download-directory.github.io
+4. Pegar el link y confirmar con Enter
+Eso baja la carpeta .zip con el proyecto completo. Descomprimirla en el ligar deseado y abrirla con el VSCode
+
 ## Proyectos en este directorio
 
 ### 00_template
