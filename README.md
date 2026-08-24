@@ -74,6 +74,21 @@ Implementa un PWM configurado a una frecuencia de 50Hz y con un ancho de pulso v
 
 Igual al anterior, pero agrega la lectura de un potenciómetro para hacer la variación de 0º a 180º y viceversa con todos los valores intermeios. Se puede, según com pilación condicional, pasar al comportamiento del anterior.
 
+### 12_uart_rx
+
+Recepción simple por interrupción, enciende un LED si recibe un '1' o lo apaga si recibe un '2'
+
+### 13_uart_rx_isr_tx_blocking
+
+Igual que el anterior, al que le agrega con transmisión bloqueante el eco del caracter recibido seguido de '\n'.
+
+### 14_uart_rx_isr_tx_isr
+
+Igual que el anterior, solo que aquí la transmisión se realiza por interrupción, evitando la FIFO interna y generando un buffer circular para transmitir apenas haya algo.
+
+### 15_uart_rx_isr_mef_tx_isr
+
+Igual que antes, pero ahora en lugar de esperar un solo caracter para controlar el LED se espera una combinación, la que se evalúa al vuelo en una MEF de recepción.
 
 ### 60_LCD1602_I2C
 
