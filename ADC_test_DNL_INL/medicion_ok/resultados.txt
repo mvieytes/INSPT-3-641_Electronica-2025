@@ -1,0 +1,36 @@
+Vpp: 3v26
+Offset: 1v63
+
+Analisis DNL/INL por histograma
+Formato de captura: histogram
+Muestras totales: 200000
+
+[Escala completa]
+Rango detectado: codigo 0 a 4095
+Codigos usados: 0 a 4095 (4096 codigos)
+Cobertura por codigo: min 1 barrido(s), max 1 barrido(s)
+Conteo ideal promedio: 48.828 hits/codigo por barrido
+Min hits/codigo: 0
+Max hits/codigo: 85
+DNL max: +0.7408 LSB
+DNL min: -1.0000 LSB
+DNL abs max: 1.0000 LSB
+INL max: +2.7319 LSB
+INL min: -2.1484 LSB
+INL abs max: 2.7319 LSB
+
+[Ventana interna 0.050 V a 3.250 V]
+Rango detectado: codigo 63 a 4032
+Codigos usados: 63 a 4032 (3970 codigos)
+Cobertura por codigo: min 1 barrido(s), max 1 barrido(s)
+Conteo ideal promedio: 48.825 hits/codigo por barrido
+Min hits/codigo: 0
+Max hits/codigo: 80
+DNL max: +0.6385 LSB
+DNL min: -1.0000 LSB
+DNL abs max: 1.0000 LSB
+INL max: +2.6574 LSB
+INL min: -2.1439 LSB
+INL abs max: 2.6574 LSB
+Grafico guardado en samples_full_dnl_inl.png
+Grafico guardado en samples_window_dnl_inl.png

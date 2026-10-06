@@ -1,0 +1,20 @@
+Vpp: 3v24
+Offset: 1v62
+
+--- Resultados del Análisis (Sine Curve Fit) ---
+Muestras procesadas: 4000
+Frecuencia Fundamental: 1000.00 Hz
+SINAD: 56.40 dB
+THD:   -60.78 dB
+SNR:   59.93 dB
+ENOB:  9.08 bits
+Gráficos guardados: samples_spectrum.png, samples_timedomain.png
+--- Resultados (FFT coherente (sin ventana)) ---
+Muestras procesadas: 4000
+Ciclos detectados: 80.00
+Frecuencia fundamental: 1000.00 Hz
+SINAD: 55.87 dB
+THD:   -66.75 dB
+SNR:   56.63 dB
+ENOB:  8.99 bits
+Espectro guardado en: samples_spectrum_coherent.png
