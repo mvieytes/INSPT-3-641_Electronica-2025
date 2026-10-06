@@ -1,7 +1,7 @@
 #ifndef _HARDWARE_H_
 #define _HARDWARE_H_
 
-#define SERVO_PIN       (17)
+#define SERVO_PIN       (17)    // Pin donde se conecta el Servo
 
 #define PWM_FREC_HZ     (5000)
 #define PWM_WRAP        (9999)
